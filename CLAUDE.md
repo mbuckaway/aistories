@@ -28,6 +28,6 @@ Story directories typically contain:
 
 ## Writing Conventions
 
-- Stories are set in **Toronto, Canada** — use Canadian institutions (DND, RCMP, OSC, parliamentary committees), Canadian geography, and Canadian cultural context rather than US equivalents.
+- Stories are set in **Toronto, Canada** — use Canadian institutions (DND, RCMP, OSC, parliamentary committees), Canadian geography, and Canadian cultural context rather than US equivalents unless specified otherwise.
 - Attribution line format: `A Story by Claude & Mark Buckaway`
 - Each story includes a preamble crediting the AI model used and the original creative prompt.

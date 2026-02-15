@@ -93,7 +93,7 @@ if [[ -n "${RATE}" ]]; then
     SAY_ARGS+=(-r "${RATE}")
 fi
 
-SAY_ARGS+=(-o "${OUTPUT}" --file-format=m4af --data-format=aac --quality=127 --bit-rate=192000)
+SAY_ARGS+=(-o "${OUTPUT}" --file-format=m4af --data-format=aac --quality=127)
 
 # Strip markdown formatting before passing to say.
 TMPFILE="$(mktemp)"

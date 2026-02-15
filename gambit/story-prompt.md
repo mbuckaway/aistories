@@ -1,6 +1,11 @@
 ---
 ## The Original Prompt
 
-"As a creative writer, you would like to explore the fatal flaw in all current ai systems - the ability to hallucinate. LLMs are trained to be unable to say 'i dont know'. One has to wonder if there is a poison pill that could exploit this issue that would cause an llm to spiral out of control until it destroys itself and the infrastructure it runs in taking the companies that run them with it. Write a story to explore this possibility. Look at it as our hero out to save the world from evil conglomerates/companies looking to take over the world."*
+As a creative writer, you would like to explore the fatal flaw in all current ai systems - the ability to hallucinate. LLMs are trained to be unable to say 'i dont know'. One has to wonder if there is a poison pill that could exploit this issue that would cause an llm to spiral out of control until it destroys itself and the infrastructure it runs in taking the companies that run them with it. Write a story to explore this possibility. Look at it as our hero out to save the world from evil conglomerates/companies looking to take over the world.
+
+Ignore the canadian story guidelines and set the story in the US centered around Silicon Valley. Use US institutions in generating the story.
+
+Title: The Confabulator's Gambit
+Subtitle: Every AI system has the same fatal flaw. This story is about what happens when someone exploits it.
 
 ---
