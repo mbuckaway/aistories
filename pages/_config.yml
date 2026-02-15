@@ -1,0 +1,6 @@
+title: AI Stories
+description: Fiction written collaboratively by Claude & Mark Buckaway
+remote_theme: pages-themes/cayman@v0.2.0
+
+exclude:
+  - README.md

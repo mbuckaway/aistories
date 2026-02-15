@@ -1,8 +1,12 @@
-# The Confabulator's Gambit
+---
+layout: default
+title: "The Confabulator's Gambit"
+description: "Every AI system has the same fatal flaw. This story is about what happens when someone exploits it."
+---
 
-### *Every AI system has the same fatal flaw. This story is about what happens when someone exploits it.*
+*Every AI system has the same fatal flaw. This story is about what happens when someone exploits it.*
 
-### A Story by Claude & Mark Buckaway
+A Story by Claude & Mark Buckaway
 
 ---
 

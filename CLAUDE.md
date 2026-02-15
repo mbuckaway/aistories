@@ -4,8 +4,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## AI Priority Instructions
 
-DO NOT MAKE SHIT UP. FIRST REVIEW ANY RELAVENT DOCUMENTATION, BUT IF YOU DO NOT KNOW, 
+DO NOT MAKE SHIT UP. FIRST REVIEW ANY RELAVENT DOCUMENTATION, BUT IF YOU DO NOT KNOW,
 YOU MUST SAY "I DO NOT KNOW THE ANSWER"
+
+NEVER advertise, promote, or mention Claude, Anthropic, or any AI tool/service in commits,
+posts, publish actions, or any public-facing content. No "Generated with Claude Code" footers,
+no Co-Authored-By AI lines, no AI branding of any kind.
 
 ## Project Overview
 
