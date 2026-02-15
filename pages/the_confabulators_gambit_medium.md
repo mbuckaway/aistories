@@ -1,7 +1,12 @@
 ---
-layout: default
-title: "The Confabulator's Gambit"
+layout: null
 ---
+
+# The Confabulator's Gambit
+
+### *Every AI system has the same fatal flaw. This story is about what happens when someone exploits it.*
+
+![The Confabulator's Gambit](the_confabulators_gambit.png)
 
 
 **This story is a work of fiction.** All characters, companies, organizations, events, and technologies depicted are entirely imaginary. Any resemblance to real persons, companies, or events is coincidental. The technical concepts discussed are dramatized for narrative purposes and do not represent a blueprint for any real-world exploit.

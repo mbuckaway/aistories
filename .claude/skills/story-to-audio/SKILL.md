@@ -9,7 +9,7 @@ Convert the story in the given directory to an M4A audio file.
 
 ## Steps
 
-1. Find the story `.md` file in `$ARGUMENTS/` (the file that is not `story-prompt.md`, `preamble.md`, or `LICENSE-*`).
+1. Find the story `.md` file in `$ARGUMENTS/` (the file that is not `story-prompt.md`, `image-prompt.md`, `preamble.md`, or `LICENSE-*`).
 2. Run the conversion script, outputting the M4A file alongside the story:
    ```
    bash scripts/story_to_audio.sh -f <story-file>

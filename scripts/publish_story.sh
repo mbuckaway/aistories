@@ -70,6 +70,7 @@ fi
 if [[ -z "${STORY_FILE}" ]]; then
     STORY_FILE=$(find "${DIR}" -maxdepth 1 -name '*.md' \
         ! -name 'story-prompt.md' \
+        ! -name 'image-prompt.md' \
         ! -name 'preamble.md' \
         ! -name 'LICENSE*' \
         -print -quit)
@@ -121,12 +122,25 @@ if [[ -n "${AUDIO_FILE}" ]]; then
     AUDIO_BASENAME=$(basename "${AUDIO_FILE}")
 fi
 
+# Check for a featured image (.png) matching the story file name.
+IMAGE_FILE="${DIR}/${BASENAME}.png"
+IMAGE_BASENAME=""
+if [[ -f "${IMAGE_FILE}" ]]; then
+    IMAGE_BASENAME="${BASENAME}.png"
+fi
+
 mkdir -p pages
 
 # Copy audio file to pages/ if present.
 if [[ -n "${AUDIO_FILE}" ]]; then
     cp "${AUDIO_FILE}" "pages/${AUDIO_BASENAME}"
     echo "Audio:     pages/${AUDIO_BASENAME}"
+fi
+
+# Copy featured image to pages/ if present.
+if [[ -n "${IMAGE_BASENAME}" ]]; then
+    cp "${IMAGE_FILE}" "pages/${IMAGE_BASENAME}"
+    echo "Image:     pages/${IMAGE_BASENAME}"
 fi
 
 # --- Build the full version (preamble + prompt + story + copyright) ---
@@ -181,15 +195,30 @@ cat >> "${FULL_PAGE}" <<EOF
 [View the story without copyright (for Medium import)](${BASENAME}_medium)
 EOF
 
-# --- Build the Medium version (preamble + prompt + story, no copyright) ---
+# --- Build the Medium version (HTML via layout: null, no theme, no copyright) ---
 
-cat > "${MEDIUM_PAGE}" <<FRONTMATTER
+# Write front matter with layout: null to skip the Cayman theme.
+cat > "${MEDIUM_PAGE}" <<'FRONTMATTER'
 ---
-layout: default
-title: "${TITLE}"
+layout: null
 ---
 
 FRONTMATTER
+
+# Title and subtitle.
+echo "# ${TITLE}" >> "${MEDIUM_PAGE}"
+echo "" >> "${MEDIUM_PAGE}"
+
+if [[ -n "${TAGLINE}" ]]; then
+    echo "### *${TAGLINE}*" >> "${MEDIUM_PAGE}"
+    echo "" >> "${MEDIUM_PAGE}"
+fi
+
+# Insert featured image if present.
+if [[ -n "${IMAGE_BASENAME}" ]]; then
+    echo "![${TITLE}](${IMAGE_BASENAME})" >> "${MEDIUM_PAGE}"
+    echo "" >> "${MEDIUM_PAGE}"
+fi
 
 # Append preamble (skip the # Preamble heading).
 tail -n +2 "${PREAMBLE}" >> "${MEDIUM_PAGE}"
@@ -210,4 +239,7 @@ echo "  Medium:  ${MEDIUM_PAGE}"
 echo "  Title:   ${TITLE}"
 if [[ -n "${AUDIO_BASENAME}" ]]; then
     echo "  Audio:   pages/${AUDIO_BASENAME}"
+fi
+if [[ -n "${IMAGE_BASENAME}" ]]; then
+    echo "  Image:   pages/${IMAGE_BASENAME}"
 fi
