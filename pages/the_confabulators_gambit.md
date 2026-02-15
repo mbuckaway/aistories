@@ -30,6 +30,14 @@ Subtitle: Every AI system has the same fatal flaw. This story is about what happ
 ---
 
 
+---
+
+<audio controls>
+  <source src="the_confabulators_gambit.m4a" type="audio/mp4">
+  Your browser does not support the audio element.
+</audio>
+
+
 ## Part One: The Woman Who Listened to Lies
 
 Dr. Mara Osei had spent eleven years teaching machines to speak. Now she was going to teach one to choke on its own words.

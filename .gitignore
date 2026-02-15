@@ -1,5 +1,2 @@
 .DS_Store
 scripts/.venv/
-*.m4a
-*.aiff
-*.wav

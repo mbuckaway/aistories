@@ -114,7 +114,20 @@ BASENAME=$(basename "${STORY_FILE}" .md)
 FULL_PAGE="pages/${BASENAME}.md"
 MEDIUM_PAGE="pages/${BASENAME}_medium.md"
 
+# Check for an audio file (.m4a) in the story directory.
+AUDIO_FILE=$(find "${DIR}" -maxdepth 1 -name '*.m4a' -print -quit)
+AUDIO_BASENAME=""
+if [[ -n "${AUDIO_FILE}" ]]; then
+    AUDIO_BASENAME=$(basename "${AUDIO_FILE}")
+fi
+
 mkdir -p pages
+
+# Copy audio file to pages/ if present.
+if [[ -n "${AUDIO_FILE}" ]]; then
+    cp "${AUDIO_FILE}" "pages/${AUDIO_BASENAME}"
+    echo "Audio:     pages/${AUDIO_BASENAME}"
+fi
 
 # --- Build the full version (preamble + prompt + story + copyright) ---
 
@@ -136,6 +149,20 @@ echo "" >> "${FULL_PAGE}"
 if [[ -f "${PROMPT}" ]]; then
     cat "${PROMPT}" >> "${FULL_PAGE}"
     echo "" >> "${FULL_PAGE}"
+fi
+
+# Insert audio player if an audio file exists.
+if [[ -n "${AUDIO_BASENAME}" ]]; then
+    cat >> "${FULL_PAGE}" <<AUDIO
+
+---
+
+<audio controls>
+  <source src="${AUDIO_BASENAME}" type="audio/mp4">
+  Your browser does not support the audio element.
+</audio>
+
+AUDIO
 fi
 
 # Append story (skip the title, tagline, and byline since they're in the
@@ -181,3 +208,6 @@ echo ""
 echo "Published: ${FULL_PAGE}"
 echo "  Medium:  ${MEDIUM_PAGE}"
 echo "  Title:   ${TITLE}"
+if [[ -n "${AUDIO_BASENAME}" ]]; then
+    echo "  Audio:   pages/${AUDIO_BASENAME}"
+fi
