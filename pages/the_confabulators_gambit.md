@@ -18,7 +18,7 @@ As a software developer, I spend my days writing code, not prose. I have ideas â
 I'm sharing the original prompt below so that anyone curious can feed it to their AI of choice and see what emerges. Different models will interpret the same seed differently, and that's part of what makes this interesting.
 
 ---
-## The original prompt:**
+## The Original Prompt
 
 "As a creative writer, you would like to explore the fatal flaw in all current ai systems - the ability to hallucinate. LLMs are trained to be unable to say 'i dont know'. One has to wonder if there is a poison pill that could exploit this issue that would cause an llm to spiral out of control until it destroys itself and the infrastructure it runs in taking the companies that run them with it. Write a story to explore this possibility. Look at it as our hero out to save the world from evil conglomerates/companies looking to take over the world."*
 
@@ -285,4 +285,4 @@ Full license text: [https://creativecommons.org/licenses/by-nc/4.0/](https://cre
 
 ---
 
-[View the story without preamble or copyright (for Medium import)](the_confabulators_gambit_medium)
+[View the story without copyright (for Medium import)](the_confabulators_gambit_medium)

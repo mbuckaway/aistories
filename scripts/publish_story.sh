@@ -3,7 +3,7 @@
 # Assemble a story for publishing to GitHub Pages.
 # Creates two versions in the pages/ directory:
 #   1. Full version: preamble + prompt + story + copyright
-#   2. Medium version: story only (for Medium import)
+#   2. Medium version: preamble + prompt + story (no copyright)
 #
 set -euo pipefail
 
@@ -151,10 +151,10 @@ cat >> "${FULL_PAGE}" <<EOF
 
 ---
 
-[View the story without preamble or copyright (for Medium import)](${BASENAME}_medium)
+[View the story without copyright (for Medium import)](${BASENAME}_medium)
 EOF
 
-# --- Build the Medium version (story only, no preamble or copyright) ---
+# --- Build the Medium version (preamble + prompt + story, no copyright) ---
 
 cat > "${MEDIUM_PAGE}" <<FRONTMATTER
 ---
@@ -164,8 +164,18 @@ title: "${TITLE}"
 
 FRONTMATTER
 
-# Include the full story as-is.
-cat "${STORY_FILE}" >> "${MEDIUM_PAGE}"
+# Append preamble (skip the # Preamble heading).
+tail -n +2 "${PREAMBLE}" >> "${MEDIUM_PAGE}"
+echo "" >> "${MEDIUM_PAGE}"
+
+# Append prompt if it exists.
+if [[ -f "${PROMPT}" ]]; then
+    cat "${PROMPT}" >> "${MEDIUM_PAGE}"
+    echo "" >> "${MEDIUM_PAGE}"
+fi
+
+# Append story (skip the title, tagline, and byline — start from first ---).
+awk 'found { print } /^---$/ && !found { found=1 }' "${STORY_FILE}" >> "${MEDIUM_PAGE}"
 
 echo ""
 echo "Published: ${FULL_PAGE}"
