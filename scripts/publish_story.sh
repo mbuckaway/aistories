@@ -1,0 +1,173 @@
+#!/usr/bin/env bash
+#
+# Assemble a story for publishing to GitHub Pages.
+# Creates two versions in the pages/ directory:
+#   1. Full version: preamble + prompt + story + copyright
+#   2. Medium version: story only (for Medium import)
+#
+set -euo pipefail
+
+usage() {
+    cat <<'EOF'
+Usage: publish_story.sh -d <story-dir> [options]
+
+Options:
+  -d DIR    Story directory (e.g., gambit) (required)
+  -f FILE   Story file within the directory (auto-detected if omitted)
+  -p FILE   Preamble file (default: common/preamble.md)
+  -r FILE   Prompt file (default: <story-dir>/story-prompt.md)
+  -c FILE   Copyright file (default: common/LICENSE-CC-BY-NC-4.0.md)
+  -h        Show this help message
+
+The script auto-detects the story file by finding the .md file in the
+story directory that is not story-prompt.md, preamble.md, or a LICENSE file.
+
+Examples:
+  publish_story.sh -d gambit
+  publish_story.sh -d gambit -p gambit/custom-preamble.md
+EOF
+}
+
+DIR=""
+STORY_FILE=""
+PREAMBLE="common/preamble.md"
+PROMPT=""
+COPYRIGHT="common/LICENSE-CC-BY-NC-4.0.md"
+
+while getopts ":d:f:p:r:c:h" opt; do
+    case "${opt}" in
+        d) DIR="${OPTARG}" ;;
+        f) STORY_FILE="${OPTARG}" ;;
+        p) PREAMBLE="${OPTARG}" ;;
+        r) PROMPT="${OPTARG}" ;;
+        c) COPYRIGHT="${OPTARG}" ;;
+        h) usage; exit 0 ;;
+        :)
+            echo "Error: -${OPTARG} requires an argument." >&2
+            usage >&2
+            exit 1
+            ;;
+        *)
+            echo "Error: Unknown option: -${OPTARG}" >&2
+            usage >&2
+            exit 1
+            ;;
+    esac
+done
+
+if [[ -z "${DIR}" ]]; then
+    echo "Error: -d is required." >&2
+    usage >&2
+    exit 1
+fi
+
+if [[ ! -d "${DIR}" ]]; then
+    echo "Error: Directory not found: ${DIR}" >&2
+    exit 1
+fi
+
+# Auto-detect story file if not specified.
+if [[ -z "${STORY_FILE}" ]]; then
+    STORY_FILE=$(find "${DIR}" -maxdepth 1 -name '*.md' \
+        ! -name 'story-prompt.md' \
+        ! -name 'preamble.md' \
+        ! -name 'LICENSE*' \
+        -print -quit)
+    if [[ -z "${STORY_FILE}" ]]; then
+        echo "Error: No story .md file found in ${DIR}" >&2
+        exit 1
+    fi
+fi
+
+if [[ ! -f "${STORY_FILE}" ]]; then
+    echo "Error: Story file not found: ${STORY_FILE}" >&2
+    exit 1
+fi
+
+# Default prompt file to <story-dir>/story-prompt.md.
+if [[ -z "${PROMPT}" ]]; then
+    PROMPT="${DIR}/story-prompt.md"
+fi
+
+# Validate required files.
+if [[ ! -f "${PREAMBLE}" ]]; then
+    echo "Error: Preamble file not found: ${PREAMBLE}" >&2
+    exit 1
+fi
+
+if [[ ! -f "${COPYRIGHT}" ]]; then
+    echo "Error: Copyright file not found: ${COPYRIGHT}" >&2
+    exit 1
+fi
+
+# Extract title from first # heading in the story.
+TITLE=$(grep -m1 '^# ' "${STORY_FILE}" | sed 's/^# //')
+if [[ -z "${TITLE}" ]]; then
+    echo "Error: Could not extract title from ${STORY_FILE}" >&2
+    exit 1
+fi
+
+# Extract tagline from the ### *...* line if present.
+TAGLINE=$(grep -m1 '^### \*' "${STORY_FILE}" | sed 's/^### \*//' | sed 's/\*$//') || true
+
+BASENAME=$(basename "${STORY_FILE}" .md)
+FULL_PAGE="pages/${BASENAME}.md"
+MEDIUM_PAGE="pages/${BASENAME}_medium.md"
+
+mkdir -p pages
+
+# --- Build the full version (preamble + prompt + story + copyright) ---
+
+# Write front matter.
+cat > "${FULL_PAGE}" <<FRONTMATTER
+---
+layout: default
+title: "${TITLE}"
+description: "${TAGLINE}"
+---
+
+FRONTMATTER
+
+# Append preamble (skip the # Preamble heading).
+tail -n +2 "${PREAMBLE}" >> "${FULL_PAGE}"
+echo "" >> "${FULL_PAGE}"
+
+# Append prompt if it exists.
+if [[ -f "${PROMPT}" ]]; then
+    cat "${PROMPT}" >> "${FULL_PAGE}"
+    echo "" >> "${FULL_PAGE}"
+fi
+
+# Append story (skip the title, tagline, and byline since they're in the
+# front matter / preamble — start from the first --- separator).
+awk 'found { print } /^---$/ && !found { found=1 }' "${STORY_FILE}" >> "${FULL_PAGE}"
+
+# Append copyright.
+echo "" >> "${FULL_PAGE}"
+cat "${COPYRIGHT}" >> "${FULL_PAGE}"
+
+# Add link to the Medium version.
+cat >> "${FULL_PAGE}" <<EOF
+
+---
+
+[View the story without preamble or copyright (for Medium import)](${BASENAME}_medium)
+EOF
+
+# --- Build the Medium version (story only, no preamble or copyright) ---
+
+cat > "${MEDIUM_PAGE}" <<FRONTMATTER
+---
+layout: default
+title: "${TITLE}"
+---
+
+FRONTMATTER
+
+# Include the full story as-is.
+cat "${STORY_FILE}" >> "${MEDIUM_PAGE}"
+
+echo ""
+echo "Published: ${FULL_PAGE}"
+echo "  Medium:  ${MEDIUM_PAGE}"
+echo "  Title:   ${TITLE}"
