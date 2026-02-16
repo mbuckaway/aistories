@@ -233,10 +233,44 @@ fi
 # Append story (skip the title, tagline, and byline — start from first ---).
 awk 'found { print } /^---$/ && !found { found=1 }' "${STORY_FILE}" >> "${MEDIUM_PAGE}"
 
+# --- Update index.md with the story entry ---
+
+INDEX_PAGE="pages/index.md"
+ENTRY_LINE="- [${TITLE}](${BASENAME}) — *${TAGLINE}*"
+MEDIUM_LINE="  ([Medium version](${BASENAME}_medium))"
+
+if [[ -f "${INDEX_PAGE}" ]]; then
+    # Check if this story is already listed (match by basename link).
+    if grep -qF "(${BASENAME})" "${INDEX_PAGE}"; then
+        # Replace the existing entry (the link line and the Medium line after it).
+        # Use a temp file to do a multi-line replacement.
+        awk -v base="(${BASENAME})" -v entry="${ENTRY_LINE}" -v medium="${MEDIUM_LINE}" '
+            $0 ~ base && /^- \[/ {
+                print entry
+                print medium
+                # Skip the next line if it is the Medium version link.
+                if ((getline nxt) > 0 && nxt !~ /^[[:space:]]+\(\[Medium/) print nxt
+                next
+            }
+            { print }
+        ' "${INDEX_PAGE}" > "${INDEX_PAGE}.tmp"
+        mv "${INDEX_PAGE}.tmp" "${INDEX_PAGE}"
+        echo "Index:     updated existing entry in ${INDEX_PAGE}"
+    else
+        # Append a new entry at the end of the file.
+        echo "${ENTRY_LINE}" >> "${INDEX_PAGE}"
+        echo "${MEDIUM_LINE}" >> "${INDEX_PAGE}"
+        echo "Index:     added new entry to ${INDEX_PAGE}"
+    fi
+else
+    echo "Warning: ${INDEX_PAGE} not found, skipping index update." >&2
+fi
+
 echo ""
 echo "Published: ${FULL_PAGE}"
 echo "  Medium:  ${MEDIUM_PAGE}"
 echo "  Title:   ${TITLE}"
+echo "  Index:   ${INDEX_PAGE}"
 if [[ -n "${AUDIO_BASENAME}" ]]; then
     echo "  Audio:   pages/${AUDIO_BASENAME}"
 fi

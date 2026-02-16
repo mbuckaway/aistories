@@ -32,6 +32,13 @@ If the story directory contains a `.png` file with the same basename as the stor
 - Copies the PNG into `pages/`
 - Includes the image in the Medium version after the subtitle (for use as the Medium featured image)
 
+## Index
+
+The publish script automatically updates `pages/index.md`:
+- If the story is already listed (matched by its basename link), the existing entry is updated with the current title and tagline
+- If the story is new, an entry is appended to the end of the index
+- Each entry links to the full version and the Medium version
+
 ## Important
 
 - Never include Co-Authored-By lines or any AI branding in commits.
