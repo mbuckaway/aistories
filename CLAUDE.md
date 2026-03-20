@@ -23,11 +23,10 @@ Each story lives in its own directory under the repository root:
 
 Story directories typically contain:
 - The main story file (`.md`)
-- A preamble with authorship and prompt context (`preamble.md`)
 - A license file (`LICENSE-CC-BY-NC-4.0.md`)
 
 ## Writing Conventions
 
 - Stories are set in **Toronto, Canada** — use Canadian institutions (DND, RCMP, OSC, parliamentary committees), Canadian geography, and Canadian cultural context rather than US equivalents unless specified otherwise.
 - Attribution line format: `A Story by Claude & Mark Buckaway`
-- Each story includes a preamble crediting the AI model used and the original creative prompt.
+- Published stories include a postamble (`common/postamble.md`) crediting the AI model used, appended after the story content.

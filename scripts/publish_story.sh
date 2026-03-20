@@ -2,8 +2,8 @@
 #
 # Assemble a story for publishing to GitHub Pages.
 # Creates two versions in the pages/ directory:
-#   1. Full version: preamble + prompt + story + copyright
-#   2. Medium version: preamble + prompt + story (no copyright)
+#   1. Full version: story + postamble + copyright
+#   2. Medium version: story + postamble (no copyright)
 #
 set -euo pipefail
 
@@ -14,32 +14,29 @@ Usage: publish_story.sh -d <story-dir> [options]
 Options:
   -d DIR    Story directory (e.g., gambit) (required)
   -f FILE   Story file within the directory (auto-detected if omitted)
-  -p FILE   Preamble file (default: common/preamble.md)
-  -r FILE   Prompt file (default: <story-dir>/story-prompt.md)
+  -p FILE   Postamble file (default: common/postamble.md)
   -c FILE   Copyright file (default: common/LICENSE-CC-BY-NC-4.0.md)
   -h        Show this help message
 
 The script auto-detects the story file by finding the .md file in the
-story directory that is not story-prompt.md, preamble.md, or a LICENSE file.
+story directory that is not story-prompt.md, postamble.md, or a LICENSE file.
 
 Examples:
   publish_story.sh -d gambit
-  publish_story.sh -d gambit -p gambit/custom-preamble.md
+  publish_story.sh -d gambit -p gambit/custom-postamble.md
 EOF
 }
 
 DIR=""
 STORY_FILE=""
-PREAMBLE="common/preamble.md"
-PROMPT=""
+POSTAMBLE="common/postamble.md"
 COPYRIGHT="common/LICENSE-CC-BY-NC-4.0.md"
 
-while getopts ":d:f:p:r:c:h" opt; do
+while getopts ":d:f:p:c:h" opt; do
     case "${opt}" in
         d) DIR="${OPTARG}" ;;
         f) STORY_FILE="${OPTARG}" ;;
-        p) PREAMBLE="${OPTARG}" ;;
-        r) PROMPT="${OPTARG}" ;;
+        p) POSTAMBLE="${OPTARG}" ;;
         c) COPYRIGHT="${OPTARG}" ;;
         h) usage; exit 0 ;;
         :)
@@ -67,16 +64,28 @@ if [[ ! -d "${DIR}" ]]; then
 fi
 
 # Auto-detect story file if not specified.
+# Preferred: the story file has the same basename as its directory.
+# Fallback: find the single non-utility .md file in the directory.
 if [[ -z "${STORY_FILE}" ]]; then
-    STORY_FILE=$(find "${DIR}" -maxdepth 1 -name '*.md' \
-        ! -name 'story-prompt.md' \
-        ! -name 'image-prompt.md' \
-        ! -name 'preamble.md' \
-        ! -name 'LICENSE*' \
-        -print -quit)
-    if [[ -z "${STORY_FILE}" ]]; then
-        echo "Error: No story .md file found in ${DIR}" >&2
-        exit 1
+    DIR_BASENAME=$(basename "${DIR}")
+    if [[ -f "${DIR}/${DIR_BASENAME}.md" ]]; then
+        STORY_FILE="${DIR}/${DIR_BASENAME}.md"
+    else
+        STORY_FILE=$(find "${DIR}" -maxdepth 1 -name '*.md' \
+            ! -name 'story-prompt.md' \
+            ! -name 'image-prompt.md' \
+            ! -name 'postamble.md' \
+            ! -name 'story-outline*.md' \
+            ! -name 'plausibility_assessment.md' \
+            ! -name 'reviewed.md' \
+            ! -name 'null_response.md' \
+            ! -name 'LICENSE*' \
+            -print -quit)
+        if [[ -z "${STORY_FILE}" ]]; then
+            echo "Error: No story .md file found in ${DIR}" >&2
+            echo "Use -f to specify the story file explicitly." >&2
+            exit 1
+        fi
     fi
 fi
 
@@ -85,14 +94,9 @@ if [[ ! -f "${STORY_FILE}" ]]; then
     exit 1
 fi
 
-# Default prompt file to <story-dir>/story-prompt.md.
-if [[ -z "${PROMPT}" ]]; then
-    PROMPT="${DIR}/story-prompt.md"
-fi
-
 # Validate required files.
-if [[ ! -f "${PREAMBLE}" ]]; then
-    echo "Error: Preamble file not found: ${PREAMBLE}" >&2
+if [[ ! -f "${POSTAMBLE}" ]]; then
+    echo "Error: Postamble file not found: ${POSTAMBLE}" >&2
     exit 1
 fi
 
@@ -143,7 +147,7 @@ if [[ -n "${IMAGE_BASENAME}" ]]; then
     echo "Image:     pages/${IMAGE_BASENAME}"
 fi
 
-# --- Build the full version (preamble + prompt + story + copyright) ---
+# --- Build the full version (story + postamble + copyright) ---
 
 # Write front matter.
 cat > "${FULL_PAGE}" <<FRONTMATTER
@@ -155,33 +159,27 @@ description: "${TAGLINE}"
 
 FRONTMATTER
 
-# Append preamble (skip the # Preamble heading).
-tail -n +2 "${PREAMBLE}" >> "${FULL_PAGE}"
-echo "" >> "${FULL_PAGE}"
-
-# Append prompt if it exists.
-if [[ -f "${PROMPT}" ]]; then
-    cat "${PROMPT}" >> "${FULL_PAGE}"
-    echo "" >> "${FULL_PAGE}"
-fi
-
 # Insert audio player if an audio file exists.
 if [[ -n "${AUDIO_BASENAME}" ]]; then
     cat >> "${FULL_PAGE}" <<AUDIO
-
----
 
 <audio controls>
   <source src="${AUDIO_BASENAME}" type="audio/mp4">
   Your browser does not support the audio element.
 </audio>
 
+---
+
 AUDIO
 fi
 
-# Append story (skip the title, tagline, and byline since they're in the
-# front matter / preamble — start from the first --- separator).
+# Append story (skip the title, tagline, and byline — start from the first --- separator).
 awk 'found { print } /^---$/ && !found { found=1 }' "${STORY_FILE}" >> "${FULL_PAGE}"
+
+# Append postamble (skip the # Post Amble heading).
+echo "" >> "${FULL_PAGE}"
+tail -n +2 "${POSTAMBLE}" >> "${FULL_PAGE}"
+echo "" >> "${FULL_PAGE}"
 
 # Append copyright.
 echo "" >> "${FULL_PAGE}"
@@ -220,18 +218,12 @@ if [[ -n "${IMAGE_BASENAME}" ]]; then
     echo "" >> "${MEDIUM_PAGE}"
 fi
 
-# Append preamble (skip the # Preamble heading).
-tail -n +2 "${PREAMBLE}" >> "${MEDIUM_PAGE}"
-echo "" >> "${MEDIUM_PAGE}"
-
-# Append prompt if it exists.
-if [[ -f "${PROMPT}" ]]; then
-    cat "${PROMPT}" >> "${MEDIUM_PAGE}"
-    echo "" >> "${MEDIUM_PAGE}"
-fi
-
 # Append story (skip the title, tagline, and byline — start from first ---).
 awk 'found { print } /^---$/ && !found { found=1 }' "${STORY_FILE}" >> "${MEDIUM_PAGE}"
+
+# Append postamble (skip the # Post Amble heading).
+echo "" >> "${MEDIUM_PAGE}"
+tail -n +2 "${POSTAMBLE}" >> "${MEDIUM_PAGE}"
 
 # --- Update index.md with the story entry ---
 

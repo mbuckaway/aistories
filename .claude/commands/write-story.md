@@ -5,15 +5,16 @@ disable-model-invocation: true
 argument-hint: <story-directory>
 ---
 
-Write a new fiction story based on the prompt in `$ARGUMENTS/story-prompt.md`.
+Write a new fiction story based on the prompt and outline in the given directory.
 
 ## Steps
 
 1. Read `$ARGUMENTS/story-prompt.md` to get the creative prompt.
-2. Read `CLAUDE.md` for writing conventions.
-3. Read `common/preamble.md` to understand the preamble format.
-4. Look at an existing story (e.g., `gambit/the_confabulators_gambit.md`) as a reference for structure, tone, length, and formatting.
-5. Write the story to `$ARGUMENTS/<story_name>.md` using the format below.
+2. If `$ARGUMENTS/story-outline.md` exists, read it — it is the authoritative source for the title, subtitle, plot structure, characters, character arcs, setting, themes, and narrative devices. Follow it faithfully. If it does not exist, proceed from the prompt alone.
+3. Read `CLAUDE.md` for writing conventions.
+4. Read `common/postamble.md` to understand the postamble format.
+5. Look at an existing story (e.g., `gambit/the_confabulators_gambit.md`) as a reference for structure, tone, length, and formatting.
+6. Write the story to `$ARGUMENTS/<story_name>.md` using the format below. Use the title and subtitle from the outline if present; otherwise derive them from the prompt.
 
 ## Story Format
 

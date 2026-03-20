@@ -11,7 +11,7 @@ Revise an existing story based on updated instructions in its `story-prompt.md`.
 
 1. Read `$ARGUMENTS/story-prompt.md` to get the current prompt with any new or changed instructions.
 2. Run `git diff $ARGUMENTS/story-prompt.md` to see what changed in the prompt. If there is no git diff (changes already committed), run `git log -1 -p -- $ARGUMENTS/story-prompt.md` to see the most recent change.
-3. Read the existing story file in `$ARGUMENTS/` (the `.md` file that is not `story-prompt.md`, `preamble.md`, or `LICENSE-*`).
+3. Read the existing story file in `$ARGUMENTS/` (the `.md` file that is not `story-prompt.md`, `postamble.md`, or `LICENSE-*`).
 4. Read `CLAUDE.md` for writing conventions.
 5. Rewrite the story, applying the prompt changes to the existing narrative. Preserve the story's structure, characters, plot, and tone — only modify what the prompt changes require. If the prompt changes are sweeping (e.g., change the setting entirely), rewrite accordingly while keeping the core narrative intact.
 6. Write the revised story back to the same file, using the same format.

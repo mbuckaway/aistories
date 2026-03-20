@@ -1,9 +1,8 @@
----
-layout: default
-title: "Story Outline: Upstream Unreachable (v2)"
-description: "The code compiled. The company didn't."
----
+# Story Outline: Upstream Unreachable (v2)
 
+### *The code compiled. The company didn't.*
+
+---
 
 ## Recommended Title
 
@@ -444,41 +443,3 @@ He drinks the coffee. It is good.
 ---
 
 *Outline complete. Review before proceeding to write story.*
-
-
-**This story is a work of fiction.** All characters, companies, organizations, events, and technologies depicted are entirely imaginary. Any resemblance to real persons, companies, or events is coincidental. The technical concepts discussed are dramatized for narrative purposes and do not represent a blueprint for any real-world exploit.
-
----
-
-**About the creation of this story:**
-
-This story was written by **Claude Sonnet 4.6**, an AI language model created by Anthropic, with creative direction and guidance from a human collaborator.
-
-As a software developer, I spend my days writing code, not prose. I have ideas — sometimes big, strange, speculative ones — that I'd love to explore through fiction, but I don't have the creative writing skills or the time to develop them into polished narratives. AI changes that equation. It lets me act as a director — shaping the concept, the tone, the themes — while a capable (if non-human) collaborator does the actual wordsmithing. Think of it as guiding a student writer: I know what I want the story to say, and the AI helps me say it.
-
-
----
-
-## License
-
-© 2026 Mark. Some rights reserved.
-
-This work is licensed under the **Creative Commons Attribution-NonCommercial 4.0 International License** (CC BY-NC 4.0).
-
-You are free to:
-
-- **Share** — copy and redistribute the material in any medium or format
-- **Adapt** — remix, transform, and build upon the material
-
-Under the following terms:
-
-- **Attribution** — You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
-- **NonCommercial** — You may not use the material for commercial purposes.
-
-No additional restrictions — You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.
-
-Full license text: [https://creativecommons.org/licenses/by-nc/4.0/](https://creativecommons.org/licenses/by-nc/4.0/)
-
----
-
-[View the story without copyright (for Medium import)](story-outline2_medium)
