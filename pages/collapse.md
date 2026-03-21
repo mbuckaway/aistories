@@ -335,7 +335,7 @@ As a software developer, I spend my days writing code, not prose. I have ideas �
 
 ## License
 
-© 2026 Mark. Some rights reserved.
+© 2026 Mark Buckaway. Some rights reserved.
 
 This work is licensed under the **Creative Commons Attribution-NonCommercial 4.0 International License** (CC BY-NC 4.0).
 

@@ -8,8 +8,6 @@ layout: null
 
 ### *The code compiled. The company didn't.*
 
-![Upstream Unreachable](collapse.png)
-
 
 Daniel Burke's AI coding tools work perfectly. They have never been faster, never been smarter, never been more reliable. It is everything else that is failing — the funding rounds, the enterprise contracts, the startup next door with the moving boxes on the stairs. When the biggest company in artificial intelligence begins to collapse, it does not take the tools with it. It takes the careers, the equity, and the quiet bet Daniel made four years ago when he traded a real salary for shares in a company that needed one successful round to change his life. The round is not coming.
 

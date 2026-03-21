@@ -203,18 +203,18 @@ layout: null
 
 FRONTMATTER
 
+# Insert image link above title if present.
+if [[ -n "${IMAGE_BASENAME}" ]]; then
+    echo "**Image link:** https://mbuckaway.github.io/aistories/${IMAGE_BASENAME}" >> "${MEDIUM_PAGE}"
+    echo "" >> "${MEDIUM_PAGE}"
+fi
+
 # Title and subtitle.
 echo "# ${TITLE}" >> "${MEDIUM_PAGE}"
 echo "" >> "${MEDIUM_PAGE}"
 
 if [[ -n "${TAGLINE}" ]]; then
     echo "### *${TAGLINE}*" >> "${MEDIUM_PAGE}"
-    echo "" >> "${MEDIUM_PAGE}"
-fi
-
-# Insert featured image if present.
-if [[ -n "${IMAGE_BASENAME}" ]]; then
-    echo "![${TITLE}](${IMAGE_BASENAME})" >> "${MEDIUM_PAGE}"
     echo "" >> "${MEDIUM_PAGE}"
 fi
 
