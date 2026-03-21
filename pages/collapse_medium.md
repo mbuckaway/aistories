@@ -2,6 +2,8 @@
 layout: null
 ---
 
+**Image link:** https://mbuckaway.github.io/aistories/collapse.png
+
 # Upstream Unreachable
 
 ### *The code compiled. The company didn't.*
